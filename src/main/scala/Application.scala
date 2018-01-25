@@ -4,7 +4,7 @@ object Application {
   import scala.io.StdIn._
 
   private var playersSelection = ROCK
-  private var computersSelection = ROCK
+  private var computersSelection = OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))
   private var start = false
   private var scissorsChosen = 0
   private var rocksChosen = 0
@@ -13,8 +13,14 @@ object Application {
   private var playerWins = 0
   private var computerWins = 0
   private var draws = 0
+  private val rNum = scala.util.Random
 
   def main(args: Array[String]):Unit = {
+
+    //to be added
+    //var toFile = bufferOutput
+    //toFile.writeToFile("test.txt", "Entered")
+
     println("Welcome to RPS")
     println("When you are ready type start")
     val startInput = readLine("prompt> ")
@@ -30,12 +36,17 @@ object Application {
       println("Please enter one of the following:\n Rock || Paper || Scissors\n Type end to stop the game")
       selectionCheck(readLine("prompt> ").toUpperCase.charAt(0).toString)
       maxCalculation()
-      println(playersSelection)
       if(playersSelection != null) {
-        computerSelection()
-        maxCounter()
-        decision()
+        val r = rNum.nextInt(3)
+        println(r)
+        if(rNum.nextInt(50) > 15){
+          computerSelection()
+        } else {computersSelection = OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))}
+          maxCounter()
+          decision()
       } else {println("Invalid input")}
+
+      println("\nPWins: " + playerWins + " Losses: " + computerWins + " Draws: " + draws + "\n")
     }
   }
 
@@ -53,17 +64,17 @@ object Application {
   }
 
   def playerWin(): Unit ={
-    println("You won!")
+    println("\nYou won!\n")
     playerWins += 1
   }
 
   def computerWin(): Unit = {
-    println("Computer won!")
+    println("\nComputer won!\n")
     computerWins += 1
   }
 
   def draw(): Unit = {
-    println("You both LOSE!")
+    println("\nYou both LOSE!\n")
     draws += 1
   }
 
