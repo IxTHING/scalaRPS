@@ -4,6 +4,7 @@ target
 *.ipr
 *.iws
 .idea
-.txt
+*.txt
+*.xml
 test.sc
 out
