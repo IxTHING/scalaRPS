@@ -1,3 +1,5 @@
+import scala.collection.mutable.ListBuffer
+
 object Application {
 
   import OptionsRPS._
@@ -14,40 +16,63 @@ object Application {
   private var computerWins = 0
   private var draws = 0
   private val rNum = scala.util.Random
+  private val toFile = BufferOutput
+  private val fromFile = BufferReader
+  private var listOfWords: ListBuffer[String] = ListBuffer()
+  private var playerName = ""
 
   def main(args: Array[String]):Unit = {
 
-    //to be added
-    //var toFile = bufferOutput
-    //toFile.writeToFile("test.txt", "Entered")
-
     println("Welcome to RPS")
+    println("Please Enter your name")
+    playerName = readLine("prompt> ")
     println("When you are ready type start")
     val startInput = readLine("prompt> ")
-    if(startInput == "start"){
+    if(startInput.equals("start")){
       println("Game Started")
       start = true
+      toFile()
+      fromFile()
     }
     gameStart()
   }
 
+  def fromArray(): Unit ={
+    for (value <- listOfWords if value.equals(ROCK.toString)) rocksChosen += 1
+    for (value <- listOfWords if value.equals(PAPER.toString)) papersChosen += 1
+    for (value <- listOfWords if value.equals(SCISSORS.toString)) scissorsChosen += 1
+  }
+
+  def toFile(file: String = playerName + ".txt", input: String = playersSelection.toString): Unit ={
+    toFile.writeToFile(file, input+"\n")
+  }
+
+  def fromFile(file: String = playerName + ".txt"): Unit ={
+    listOfWords = fromFile.readFromFile(file)
+    fromArray()
+  }
+
   def gameStart(): Unit ={
-    while(start){
+    while(start) {
       println("Please enter one of the following:\n Rock || Paper || Scissors\n Type end to stop the game")
       selectionCheck(readLine("prompt> ").toUpperCase.charAt(0).toString)
       maxCalculation()
-      if(playersSelection != null) {
-        val r = rNum.nextInt(3)
-        println(r)
-        if(rNum.nextInt(50) > 15){
+      if (playersSelection != null) {
+        if (rNum.nextInt(50) > 35) {
           computerSelection()
-        } else {computersSelection = OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))}
-          maxCounter()
-          decision()
-      } else {println("Invalid input")}
+        } else {
+          computersSelection = OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))
+        }
+        maxCounter()
+        decision()
+      } else {
+        println("Invalid input")
+      }
 
-      println("\nPWins: " + playerWins + " Losses: " + computerWins + " Draws: " + draws + "\n")
+      println("\nWins: " + playerWins + " Losses: " + computerWins + " Draws: " + draws + "\n")
+      toFile()
     }
+    println("Game Ended, thank you for playing!")
   }
 
   def decision(): Unit = (playersSelection, computersSelection) match{
@@ -101,6 +126,6 @@ object Application {
     case "P" => playersSelection = PAPER
     case "S" => playersSelection = SCISSORS
     case "E" => start = false
-    case _ => playersSelection = null
+    case _ => playersSelection = OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))
   }
 }
