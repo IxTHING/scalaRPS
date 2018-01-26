@@ -1,4 +1,5 @@
-OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))
-OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))
-OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))
-OptionsRPS(scala.util.Random.nextInt(OptionsRPS.maxId))
+
+def factorial(n: Int): Int=
+  if(n == 0) 1 else n * factorial(n-1)
+
+factorial(4)
